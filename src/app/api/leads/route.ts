@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
+import { getDb, hasDb } from "@/db";
+import { leads } from "@/db/schema";
 
-// Lead intake endpoint.
-// MVP: validates and logs the lead. Wire up email (Resend) + DB persistence next.
+// Lead intake endpoint. Persists to Postgres when configured.
+// TODO(next): email notification via Resend.
 export async function POST(request: Request) {
   let body: Record<string, unknown>;
   try {
@@ -28,13 +30,15 @@ export async function POST(request: Request) {
     dealSlug,
     name,
     email,
-    phone: String(body.phone ?? "").trim() || undefined,
-    message: String(body.message ?? "").trim() || undefined,
-    receivedAt: new Date().toISOString(),
+    phone: String(body.phone ?? "").trim() || null,
+    message: String(body.message ?? "").trim() || null,
   };
 
-  // TODO(next): persist to DB and email notification via Resend.
-  console.log("[lead] received", lead);
+  if (hasDb) {
+    await getDb().insert(leads).values(lead);
+  } else {
+    console.log("[lead] received (no DB configured)", lead);
+  }
 
   return NextResponse.json({ ok: true });
 }
