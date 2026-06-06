@@ -8,8 +8,13 @@ import { BedIcon, BathIcon, RulerIcon } from "@/components/property-icons";
 import { StatusBadge } from "@/components/status-badge";
 import { getAllDeals, getDealBySlug } from "@/lib/deals";
 import { formatCurrency, formatPercent } from "@/lib/format";
+import type { Deal } from "@/lib/types";
 
 type Params = Promise<{ slug: string }>;
+
+// ISR: reflect admin edits (primary image, fields, publish) within a minute,
+// on top of the instant revalidatePath calls the admin actions already make.
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   const deals = await getAllDeals();
@@ -104,6 +109,11 @@ export default async function DealDetailPage({ params }: { params: Params }) {
             )}
           </div>
 
+          {/* Price block — shown here on mobile (above the description) */}
+          <div className="mt-6 lg:hidden">
+            <PriceCard deal={deal} />
+          </div>
+
           <h2 className="mt-8 text-lg font-semibold text-slate-900">About this deal</h2>
           <div
             className="prose prose-slate mt-2 max-w-none [&_li]:my-0.5 [&_li>p]:my-0 [&_ol]:my-2 [&_p]:my-2 [&_ul]:my-2"
@@ -125,19 +135,10 @@ export default async function DealDetailPage({ params }: { params: Params }) {
           )}
         </div>
 
-        {/* Sidebar: financials + lead form */}
+        {/* Sidebar: financials (desktop only) + lead form */}
         <aside className="space-y-6">
-          <div className="rounded-2xl border border-slate-200 p-6 shadow-sm">
-            <div className="text-3xl font-extrabold text-slate-900">
-              {formatCurrency(deal.purchasePrice)}
-            </div>
-            <div className="text-sm text-slate-500">Purchase price</div>
-
-            <dl className="mt-4 space-y-3 border-t border-slate-100 pt-4 text-sm">
-              <Row label="Entry fee" value={formatCurrency(deal.entryFee)} />
-              {deal.interestRate != null && <Row label="Interest rate" value={formatPercent(deal.interestRate)} />}
-              {deal.monthlyPayment != null && <Row label="Monthly payment" value={formatCurrency(deal.monthlyPayment)} />}
-            </dl>
+          <div className="hidden lg:block">
+            <PriceCard deal={deal} />
           </div>
 
           <div className="rounded-2xl border border-slate-200 p-6 shadow-sm">
@@ -146,6 +147,23 @@ export default async function DealDetailPage({ params }: { params: Params }) {
         </aside>
       </div>
     </article>
+  );
+}
+
+function PriceCard({ deal }: { deal: Deal }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 p-6 shadow-sm">
+      <div className="text-3xl font-extrabold text-slate-900">
+        {formatCurrency(deal.purchasePrice)}
+      </div>
+      <div className="text-sm text-slate-500">Purchase price</div>
+
+      <dl className="mt-4 space-y-3 border-t border-slate-100 pt-4 text-sm">
+        <Row label="Entry fee" value={formatCurrency(deal.entryFee)} />
+        {deal.interestRate != null && <Row label="Interest rate" value={formatPercent(deal.interestRate)} />}
+        {deal.monthlyPayment != null && <Row label="Monthly payment" value={formatCurrency(deal.monthlyPayment)} />}
+      </dl>
+    </div>
   );
 }
 

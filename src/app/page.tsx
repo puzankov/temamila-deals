@@ -7,6 +7,9 @@ import { getFeaturedDeals } from "@/lib/deals";
 const HERO_IMAGE =
   "/hero.png";
 
+// Refresh from the DB at least once a minute (plus instant revalidate on edits).
+export const revalidate = 60;
+
 export default async function HomePage() {
   const featured = await getFeaturedDeals(3);
 

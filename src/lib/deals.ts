@@ -77,9 +77,13 @@ export async function getDealById(id: string): Promise<Deal | null> {
   return rows[0] ? rowToDeal(rows[0]) : null;
 }
 
+// First N for the homepage: featured deals first, then fill with any other
+// published, non-closed deals. getAllDeals already excludes drafts.
 export async function getFeaturedDeals(limit = 3): Promise<Deal[]> {
-  const all = await getAllDeals();
-  return all.filter((d) => d.featured && d.status !== "closed").slice(0, limit);
+  const live = (await getAllDeals()).filter((d) => d.published && d.status !== "closed");
+  const featured = live.filter((d) => d.featured);
+  const rest = live.filter((d) => !d.featured);
+  return [...featured, ...rest].slice(0, limit);
 }
 
 export async function getFilteredDeals(filters: DealFilters): Promise<Deal[]> {
