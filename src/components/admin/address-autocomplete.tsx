@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useAutosave } from "./autosave";
+import { GOOGLE_MAPS_KEY, useGoogleMaps } from "../google-maps";
 
 const inputCls =
   "w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/30";
@@ -15,53 +16,33 @@ export interface AddressValues {
   lng?: number;
 }
 
-const GOOGLE_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-
-/** Loads the Google Maps JS (Places) script once; returns true when ready. */
-function useGoogleMaps(): boolean {
-  // Lazy init catches the case where the script is already on the page.
-  const [ready, setReady] = useState(
-    () => typeof google !== "undefined" && !!google.maps?.places,
-  );
-  useEffect(() => {
-    if (!GOOGLE_KEY || ready || typeof window === "undefined") return;
-    const existing = document.getElementById("gmaps-js") as HTMLScriptElement | null;
-    if (existing) {
-      existing.addEventListener("load", () => setReady(true));
-      return;
-    }
-    const script = document.createElement("script");
-    script.id = "gmaps-js";
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_KEY}&libraries=places&loading=async`;
-    script.async = true;
-    script.onload = () => setReady(true);
-    document.head.appendChild(script);
-  }, [ready]);
-  return ready;
+interface Suggestion {
+  id: string;
+  text: string;
+  prediction: google.maps.places.PlacePrediction;
 }
 
-function parsePlace(place: google.maps.places.PlaceResult): Partial<AddressValues> {
-  const get = (type: string, short = false) => {
-    const c = place.address_components?.find((comp) => comp.types.includes(type));
-    return c ? (short ? c.short_name : c.long_name) : "";
-  };
-  const streetNumber = get("street_number");
-  const route = get("route");
-  const line = [streetNumber, route].filter(Boolean).join(" ");
+function comp(place: google.maps.places.Place, type: string, short = false): string {
+  const c = place.addressComponents?.find((x) => x.types.includes(type));
+  if (!c) return "";
+  return (short ? c.shortText : c.longText) ?? "";
+}
+
+function parsePlace(place: google.maps.places.Place): Partial<AddressValues> {
+  const line = [comp(place, "street_number"), comp(place, "route")].filter(Boolean).join(" ");
   return {
-    address: line || place.formatted_address?.split(",")[0] || "",
-    city: get("locality") || get("sublocality") || get("postal_town"),
-    state: get("administrative_area_level_1", true),
-    zip: get("postal_code"),
-    lat: place.geometry?.location?.lat(),
-    lng: place.geometry?.location?.lng(),
+    address: line || place.formattedAddress?.split(",")[0] || "",
+    city: comp(place, "locality") || comp(place, "postal_town") || comp(place, "sublocality_level_1"),
+    state: comp(place, "administrative_area_level_1", true),
+    zip: comp(place, "postal_code"),
+    lat: place.location?.lat(),
+    lng: place.location?.lng(),
   };
 }
 
 export function AddressAutocomplete({ initial }: { initial?: Partial<AddressValues> }) {
   const ready = useGoogleMaps();
   const save = useAutosave();
-  const inputRef = useRef<HTMLInputElement>(null);
   const [v, setV] = useState<AddressValues>({
     address: initial?.address ?? "",
     city: initial?.city ?? "",
@@ -70,31 +51,75 @@ export function AddressAutocomplete({ initial }: { initial?: Partial<AddressValu
     lat: initial?.lat,
     lng: initial?.lng,
   });
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [open, setOpen] = useState(false);
 
+  const tokenRef = useRef<google.maps.places.AutocompleteSessionToken | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const boxRef = useRef<HTMLDivElement>(null);
+
+  // Close the dropdown on outside click.
   useEffect(() => {
-    if (!ready || !inputRef.current) return;
-    const ac = new google.maps.places.Autocomplete(inputRef.current, {
-      types: ["address"],
-      componentRestrictions: { country: ["us"] },
-      fields: ["address_components", "geometry", "formatted_address"],
-    });
-    const listener = ac.addListener("place_changed", () => {
-      const parsed = parsePlace(ac.getPlace());
-      setV((prev) => ({ ...prev, ...parsed }));
+    function onDoc(e: MouseEvent) {
+      if (boxRef.current && !boxRef.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, []);
+
+  async function fetchSuggestions(input: string) {
+    if (!ready || !GOOGLE_MAPS_KEY || input.trim().length < 3) {
+      setSuggestions([]);
+      setOpen(false);
+      return;
+    }
+    if (!tokenRef.current) tokenRef.current = new google.maps.places.AutocompleteSessionToken();
+    try {
+      const { suggestions: results } =
+        await google.maps.places.AutocompleteSuggestion.fetchAutocompleteSuggestions({
+          input,
+          includedRegionCodes: ["us"],
+          sessionToken: tokenRef.current,
+        });
+      const list: Suggestion[] = (results ?? [])
+        .map((s) => s.placePrediction)
+        .filter((p): p is google.maps.places.PlacePrediction => !!p)
+        .map((p) => ({ id: p.placeId, text: p.text.text, prediction: p }));
+      setSuggestions(list);
+      setOpen(list.length > 0);
+    } catch (err) {
+      console.error("Autocomplete failed", err);
+    }
+  }
+
+  function onInput(value: string) {
+    setV((p) => ({ ...p, address: value }));
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => fetchSuggestions(value), 250);
+  }
+
+  async function choose(s: Suggestion) {
+    setOpen(false);
+    setSuggestions([]);
+    try {
+      const place = s.prediction.toPlace();
+      await place.fetchFields({ fields: ["addressComponents", "location", "formattedAddress"] });
+      setV((prev) => ({ ...prev, ...parsePlace(place) }));
+      tokenRef.current = null; // end the billing session
       save();
-    });
-    return () => listener.remove();
-  }, [ready, save]);
+    } catch (err) {
+      console.error("Place details failed", err);
+    }
+  }
 
   const located = v.lat != null && v.lng != null;
 
   return (
     <div className="space-y-3">
-      {/* Smart address line */}
-      <div>
+      <div ref={boxRef} className="relative">
         <div className="flex items-center justify-between">
           <label className="text-sm font-medium text-slate-700">Address</label>
-          {GOOGLE_KEY ? (
+          {GOOGLE_MAPS_KEY ? (
             located ? (
               <span className="text-xs font-medium text-brand-dark">✓ Located on map</span>
             ) : (
@@ -105,19 +130,39 @@ export function AddressAutocomplete({ initial }: { initial?: Partial<AddressValu
           )}
         </div>
         <input
-          ref={inputRef}
           name="address"
           required
           autoComplete="off"
           placeholder="Start typing the street address…"
           value={v.address}
-          onChange={(e) => setV((p) => ({ ...p, address: e.target.value }))}
+          onChange={(e) => onInput(e.target.value)}
+          onFocus={() => suggestions.length > 0 && setOpen(true)}
           onKeyDown={(e) => {
-            // Don't submit the form when picking a suggestion with Enter.
-            if (e.key === "Enter") e.preventDefault();
+            if (e.key === "Enter") {
+              e.preventDefault();
+              if (open && suggestions[0]) choose(suggestions[0]);
+            } else if (e.key === "Escape") {
+              setOpen(false);
+            }
           }}
           className={`mt-1 ${inputCls}`}
         />
+
+        {open && (
+          <ul className="absolute z-30 mt-1 max-h-64 w-full overflow-auto rounded-lg border border-slate-200 bg-white py-1 shadow-lg">
+            {suggestions.map((s) => (
+              <li key={s.id}>
+                <button
+                  type="button"
+                  onClick={() => choose(s)}
+                  className="block w-full px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50"
+                >
+                  {s.text}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {/* Auto-filled, still editable */}
@@ -153,7 +198,6 @@ export function AddressAutocomplete({ initial }: { initial?: Partial<AddressValu
         </div>
       </div>
 
-      {/* Coordinates travel with the form; surfaced read-only here. */}
       <input type="hidden" name="lat" value={v.lat ?? ""} />
       <input type="hidden" name="lng" value={v.lng ?? ""} />
     </div>

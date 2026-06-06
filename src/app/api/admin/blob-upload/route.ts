@@ -1,38 +1,39 @@
-import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
+import { put } from "@vercel/blob";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { ADMIN_COOKIE, verifySessionToken } from "@/lib/auth";
 
-async function isAdmin(): Promise<boolean> {
-  const token = (await cookies()).get(ADMIN_COOKIE)?.value;
-  return verifySessionToken(token);
-}
+const MAX_BYTES = 10 * 1024 * 1024; // 10 MB (images are compressed client-side first)
 
-// Client-upload handshake: the browser uploads the file directly to Vercel Blob,
-// hitting this route only to authorize and mint a short-lived upload token.
-export async function POST(request: Request): Promise<NextResponse> {
-  const body = (await request.json()) as HandleUploadBody;
+// Server-side image upload: the browser POSTs a (compressed) file here and we
+// store it in Vercel Blob with put(). Avoids browser->blob CORS entirely.
+export async function POST(request: Request) {
+  const token = (await cookies()).get(ADMIN_COOKIE)?.value;
+  if (!(await verifySessionToken(token))) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const form = await request.formData();
+  const file = form.get("file");
+  if (!(file instanceof File)) {
+    return NextResponse.json({ error: "No file provided" }, { status: 400 });
+  }
+  if (!file.type.startsWith("image/")) {
+    return NextResponse.json({ error: "Only images are allowed" }, { status: 400 });
+  }
+  if (file.size > MAX_BYTES) {
+    return NextResponse.json({ error: "Image too large" }, { status: 413 });
+  }
 
   try {
-    const result = await handleUpload({
-      body,
-      request,
-      onBeforeGenerateToken: async () => {
-        if (!(await isAdmin())) throw new Error("Unauthorized");
-        return {
-          allowedContentTypes: ["image/jpeg", "image/png", "image/webp", "image/avif", "image/gif"],
-          addRandomSuffix: true,
-          maximumSizeInBytes: 15 * 1024 * 1024, // 15 MB
-        };
-      },
-      // Fires from Vercel after upload completes (no-op locally).
-      onUploadCompleted: async () => {},
+    const blob = await put(file.name, file, {
+      access: "public",
+      addRandomSuffix: true,
+      contentType: file.type,
     });
-    return NextResponse.json(result);
+    return NextResponse.json({ url: blob.url });
   } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Upload failed" },
-      { status: 400 },
-    );
+    console.error("[blob] upload failed", error);
+    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
   }
 }

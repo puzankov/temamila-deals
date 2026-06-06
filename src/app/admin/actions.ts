@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { deleteDeal, getDealById } from "@/lib/deals";
+import { deleteDeal, getDealById, updateDeal } from "@/lib/deals";
 import { deleteBlobs } from "@/lib/deal-write";
 import {
   ADMIN_COOKIE,
@@ -38,6 +38,17 @@ export async function logout() {
   const jar = await cookies();
   jar.delete(ADMIN_COOKIE);
   redirect("/admin/login");
+}
+
+// ---------- Publish toggle ----------
+
+export async function setPublishedAction(id: string, published: boolean) {
+  if (!id) return;
+  const updated = await updateDeal(id, { published });
+  revalidatePath("/");
+  revalidatePath("/deals");
+  if (updated) revalidatePath(`/deals/${updated.slug}`);
+  revalidatePath("/admin");
 }
 
 // ---------- Delete ----------

@@ -1,9 +1,41 @@
 "use client";
 
-import { upload } from "@vercel/blob/client";
 import Image from "next/image";
 import { useMemo, useRef, useState } from "react";
 import { useAutosave } from "./autosave";
+
+// Downscale + re-encode an image in the browser before upload. Keeps files
+// well under the serverless body limit and improves page performance.
+async function compressImage(file: File, maxDim = 1920, quality = 0.82): Promise<Blob> {
+  try {
+    const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
+    const scale = Math.min(1, maxDim / Math.max(bitmap.width, bitmap.height));
+    const width = Math.round(bitmap.width * scale);
+    const height = Math.round(bitmap.height * scale);
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return file;
+    ctx.drawImage(bitmap, 0, 0, width, height);
+    bitmap.close();
+    const blob = await new Promise<Blob | null>((res) => canvas.toBlob(res, "image/jpeg", quality));
+    return blob ?? file;
+  } catch {
+    return file; // fall back to the original if the browser can't decode it
+  }
+}
+
+async function uploadFile(file: File): Promise<string> {
+  const compressed = await compressImage(file);
+  const baseName = file.name.replace(/\.[^.]+$/, "") || "photo";
+  const fd = new FormData();
+  fd.append("file", compressed, `${baseName}.jpg`);
+  const res = await fetch("/api/admin/blob-upload", { method: "POST", body: fd });
+  if (!res.ok) throw new Error("upload failed");
+  const data: { url: string } = await res.json();
+  return data.url;
+}
 
 export function ImageUploader({
   name,
@@ -32,12 +64,8 @@ export function ImageUploader({
     await Promise.allSettled(
       files.map(async (file) => {
         try {
-          const blob = await upload(file.name, file, {
-            access: "public",
-            handleUploadUrl: "/api/admin/blob-upload",
-            contentType: file.type,
-          });
-          setImages((prev) => [...prev, blob.url]);
+          const url = await uploadFile(file);
+          setImages((prev) => [...prev, url]);
           save();
         } catch {
           setError("Some images failed to upload. Please try again.");

@@ -4,6 +4,7 @@ import { getAllDealsAdmin } from "@/lib/deals";
 import { formatCurrency } from "@/lib/format";
 import { StatusBadge } from "@/components/status-badge";
 import { DeleteDealButton } from "@/components/admin/delete-deal-button";
+import { TablePublishToggle } from "@/components/admin/table-publish-toggle";
 import { EyeIcon, PencilIcon } from "@/components/admin/icons";
 
 export const dynamic = "force-dynamic";
@@ -42,6 +43,7 @@ export default async function AdminDashboard() {
               <th className="px-4 py-3">Types</th>
               <th className="px-4 py-3">Price</th>
               <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3">Published</th>
               <th className="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
@@ -52,11 +54,6 @@ export default async function AdminDashboard() {
                   <div className="flex items-center gap-1.5 font-medium text-slate-900">
                     <span>{deal.address}</span>
                     {deal.featured && <span className="text-amber-500" title="Featured">★</span>}
-                    {!deal.published && (
-                      <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700">
-                        Draft
-                      </span>
-                    )}
                   </div>
                   <div className="text-xs text-slate-500">
                     {deal.city}, {deal.state} {deal.zip}
@@ -82,6 +79,13 @@ export default async function AdminDashboard() {
                 </td>
                 <td className="px-4 py-3">
                   <StatusBadge status={deal.status} />
+                </td>
+                <td className="px-4 py-3">
+                  {hasDb ? (
+                    <TablePublishToggle id={deal.id} published={deal.published} />
+                  ) : (
+                    <span className="text-xs text-slate-500">{deal.published ? "Live" : "Draft"}</span>
+                  )}
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center justify-end gap-1">
@@ -111,7 +115,7 @@ export default async function AdminDashboard() {
             ))}
             {deals.length === 0 && (
               <tr>
-                <td colSpan={7} className="px-4 py-10 text-center text-slate-500">
+                <td colSpan={8} className="px-4 py-10 text-center text-slate-500">
                   No deals yet. Create your first one.
                 </td>
               </tr>
