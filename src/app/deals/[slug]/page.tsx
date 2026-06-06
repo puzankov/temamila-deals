@@ -103,7 +103,10 @@ export default async function DealDetailPage({ params }: { params: Params }) {
           </div>
 
           <h2 className="mt-8 text-lg font-semibold text-slate-900">About this deal</h2>
-          <p className="mt-2 leading-relaxed text-slate-700">{deal.description}</p>
+          <div
+            className="prose prose-slate mt-2 max-w-none [&_li]:my-0.5 [&_li>p]:my-0 [&_ol]:my-2 [&_p]:my-2 [&_ul]:my-2"
+            dangerouslySetInnerHTML={{ __html: deal.description }}
+          />
 
           {/* Map placeholder — feature coming later */}
           <div className="mt-8 flex aspect-[16/7] items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-slate-50 text-sm text-slate-400">
