@@ -5,7 +5,7 @@ import { getFeaturedDeals } from "@/lib/deals";
 
 // Hero background photo. Swap this URL (or drop a file in /public and use "/your.jpg").
 const HERO_IMAGE =
-  "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=2400&q=80";
+  "/hero.png";
 
 export default async function HomePage() {
   const featured = await getFeaturedDeals(3);
