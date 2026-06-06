@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useAutosave } from "./autosave";
 
 function btnCls(active: boolean) {
   return `flex h-9 min-w-9 items-center justify-center rounded-lg border px-2 text-sm font-medium transition ${
@@ -27,6 +28,7 @@ export function QuickNumber({
   options?: number[];
   step?: string;
 }) {
+  const save = useAutosave();
   const presets = new Set(options);
   const initial = defaultValue ?? null;
   const [value, setValue] = useState<number | null>(initial);
@@ -43,6 +45,7 @@ export function QuickNumber({
             onClick={() => {
               setValue(o);
               setManual(false);
+              save();
             }}
             className={btnCls(!manual && value === o)}
           >

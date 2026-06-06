@@ -3,6 +3,7 @@
 import { EditorContent, useEditor, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useState } from "react";
+import { useAutosave } from "./autosave";
 
 // Tighter list/paragraph spacing than prose defaults; shared by editor + detail view.
 export const PROSE_TIGHT =
@@ -15,6 +16,7 @@ export function RichTextEditor({
   name: string;
   defaultValue?: string;
 }) {
+  const save = useAutosave();
   const [html, setHtml] = useState(defaultValue ?? "");
 
   const editor = useEditor({
@@ -31,6 +33,7 @@ export function RichTextEditor({
     ],
     content: defaultValue ?? "",
     onUpdate: ({ editor }) => setHtml(editor.getHTML()),
+    onBlur: () => save(),
     editorProps: {
       attributes: {
         class: `prose prose-sm prose-slate max-w-none px-3 py-2 focus:outline-none ${PROSE_TIGHT}`,

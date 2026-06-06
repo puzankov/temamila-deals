@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useAutosave } from "./autosave";
 
 /** A button-group switcher that submits the chosen value via a hidden input. */
 export function SegmentedSwitch({
@@ -12,6 +13,7 @@ export function SegmentedSwitch({
   options: { value: string; label: string }[];
   defaultValue?: string;
 }) {
+  const save = useAutosave();
   const [val, setVal] = useState(defaultValue ?? options[0]?.value);
 
   return (
@@ -20,7 +22,10 @@ export function SegmentedSwitch({
         <button
           key={o.value}
           type="button"
-          onClick={() => setVal(o.value)}
+          onClick={() => {
+            setVal(o.value);
+            save();
+          }}
           className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${
             val === o.value ? "bg-brand text-white shadow-sm" : "text-slate-600 hover:text-slate-900"
           }`}

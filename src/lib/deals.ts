@@ -39,6 +39,7 @@ function rowToDeal(r: DealRow): Deal {
     description: r.description,
     images: r.images,
     featured: r.featured,
+    published: r.published,
     createdAt:
       r.createdAt instanceof Date ? r.createdAt.toISOString() : String(r.createdAt),
   };
@@ -46,7 +47,19 @@ function rowToDeal(r: DealRow): Deal {
 
 // ---------- Public reads ----------
 
+// Public: only published deals.
 export async function getAllDeals(): Promise<Deal[]> {
+  if (!hasDb) return SEED_DEALS.filter((d) => d.published);
+  const rows = await getDb()
+    .select()
+    .from(dealsTable)
+    .where(eq(dealsTable.published, true))
+    .orderBy(desc(dealsTable.createdAt));
+  return rows.map(rowToDeal);
+}
+
+// Admin: every deal, drafts included.
+export async function getAllDealsAdmin(): Promise<Deal[]> {
   if (!hasDb) return SEED_DEALS;
   const rows = await getDb().select().from(dealsTable).orderBy(desc(dealsTable.createdAt));
   return rows.map(rowToDeal);
@@ -72,7 +85,7 @@ export async function getFeaturedDeals(limit = 3): Promise<Deal[]> {
 export async function getFilteredDeals(filters: DealFilters): Promise<Deal[]> {
   if (!hasDb) return filterSeed(filters);
 
-  const conds: SQL[] = [];
+  const conds: SQL[] = [eq(dealsTable.published, true)];
   if (filters.q) {
     const q = `%${filters.q.trim()}%`;
     conds.push(
@@ -109,7 +122,7 @@ export async function getFilteredDeals(filters: DealFilters): Promise<Deal[]> {
 }
 
 function filterSeed(filters: DealFilters): Deal[] {
-  let deals = [...SEED_DEALS];
+  let deals = SEED_DEALS.filter((d) => d.published);
   if (filters.q) {
     const q = filters.q.toLowerCase().trim();
     deals = deals.filter((d) =>
@@ -142,7 +155,11 @@ export async function createDeal(data: NewDealRow): Promise<Deal> {
 }
 
 export async function updateDeal(id: string, data: Partial<NewDealRow>): Promise<Deal | null> {
-  const rows = await getDb().update(dealsTable).set(data).where(eq(dealsTable.id, id)).returning();
+  const rows = await getDb()
+    .update(dealsTable)
+    .set({ ...data, updatedAt: new Date() })
+    .where(eq(dealsTable.id, id))
+    .returning();
   return rows[0] ? rowToDeal(rows[0]) : null;
 }
 

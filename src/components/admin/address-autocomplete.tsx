@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useAutosave } from "./autosave";
 
 const inputCls =
   "w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/30";
@@ -59,6 +60,7 @@ function parsePlace(place: google.maps.places.PlaceResult): Partial<AddressValue
 
 export function AddressAutocomplete({ initial }: { initial?: Partial<AddressValues> }) {
   const ready = useGoogleMaps();
+  const save = useAutosave();
   const inputRef = useRef<HTMLInputElement>(null);
   const [v, setV] = useState<AddressValues>({
     address: initial?.address ?? "",
@@ -79,9 +81,10 @@ export function AddressAutocomplete({ initial }: { initial?: Partial<AddressValu
     const listener = ac.addListener("place_changed", () => {
       const parsed = parsePlace(ac.getPlace());
       setV((prev) => ({ ...prev, ...parsed }));
+      save();
     });
     return () => listener.remove();
-  }, [ready]);
+  }, [ready, save]);
 
   const located = v.lat != null && v.lng != null;
 

@@ -49,6 +49,7 @@ export interface Deal {
   description: string;
   images: string[];
   featured?: boolean;
+  published: boolean;
 
   createdAt: string; // ISO date
 }

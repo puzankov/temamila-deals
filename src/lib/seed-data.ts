@@ -29,6 +29,7 @@ export const SEED_DEALS: Deal[] = [
     description:
       "Turnkey single-family in a high-demand Miami Gardens pocket. Existing low-rate mortgage makes this an ideal subject-to or seller-finance acquisition with strong monthly cash flow as a long-term rental.",
     images: [img("18700-nw-44th-ct-miami-gardens-fl", 1), img("18700-nw-44th-ct-miami-gardens-fl", 2), img("18700-nw-44th-ct-miami-gardens-fl", 3)],
+    published: true,
     createdAt: "2026-05-28",
   },
   {
@@ -53,6 +54,7 @@ export const SEED_DEALS: Deal[] = [
     description:
       "Fully furnished resort-area short-term rental minutes from Disney. Proven Airbnb income history. Hybrid seller-finance terms available with a manageable entry fee for an instantly cash-flowing STR.",
     images: [img("1829-caribbean-view-ter-kissimmee-fl", 1), img("1829-caribbean-view-ter-kissimmee-fl", 2), img("1829-caribbean-view-ter-kissimmee-fl", 3)],
+    published: true,
     createdAt: "2026-05-30",
   },
   {
@@ -74,6 +76,7 @@ export const SEED_DEALS: Deal[] = [
     description:
       "Cash-only fixer in an appreciating Back of the Yards corridor. Solid bones, cosmetic rehab. Comps support a strong ARV for a quick flip or BRRRR. Repair estimate and comps available on request.",
     images: [img("4412-s-honore-st-chicago-il", 1), img("4412-s-honore-st-chicago-il", 2)],
+    published: true,
     createdAt: "2026-06-01",
   },
   {
@@ -97,6 +100,7 @@ export const SEED_DEALS: Deal[] = [
     description:
       "East Austin co-living / mid-term rental play with five private suites. Novation structure in place. Walkable to downtown with steady traveling-professional demand.",
     images: [img("2207-e-cesar-chavez-st-austin-tx", 1), img("2207-e-cesar-chavez-st-austin-tx", 2)],
+    published: true,
     createdAt: "2026-05-20",
   },
   {
@@ -120,6 +124,7 @@ export const SEED_DEALS: Deal[] = [
     description:
       "Renovated Westside bungalow with an assumable-style low rate via subject-to. Lease-purchase exit available. Strong rent-to-price ratio in a rapidly improving neighborhood.",
     images: [img("915-magnolia-ave-atlanta-ga", 1), img("915-magnolia-ave-atlanta-ga", 2)],
+    published: true,
     createdAt: "2026-06-02",
   },
   {
@@ -143,6 +148,7 @@ export const SEED_DEALS: Deal[] = [
     description:
       "Large multi-suite property near downtown San Jose. Seller open to creative hybrid financing to defer capital gains. Excellent value-add and house-hack potential in a supply-constrained market.",
     images: [img("330-w-julian-st-san-jose-ca", 1), img("330-w-julian-st-san-jose-ca", 2)],
+    published: true,
     createdAt: "2026-05-15",
   },
   {
@@ -164,6 +170,7 @@ export const SEED_DEALS: Deal[] = [
     description:
       "Cash-flowing turnkey rental near Edgewater Park. Already tenant-occupied at market rent. Clean title, fast close. (This deal is closed — shown as a track record example.)",
     images: [img("78-edgewater-dr-cleveland-oh", 1)],
+    published: true,
     createdAt: "2026-04-30",
   },
   {
@@ -188,6 +195,7 @@ export const SEED_DEALS: Deal[] = [
     description:
       "North-central Phoenix home with a low fixed rate, perfect for a subject-to STR conversion. City permits STR in this zone. High nightly demand during spring training and winter snowbird season.",
     images: [img("612-w-glenn-st-phoenix-az", 1), img("612-w-glenn-st-phoenix-az", 2)],
+    published: true,
     createdAt: "2026-06-03",
   },
 ];

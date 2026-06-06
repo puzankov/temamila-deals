@@ -38,8 +38,11 @@ export const deals = pgTable("deals", {
   description: text("description").notNull().default(""),
   images: text("images").array().notNull().default([]),
   featured: boolean("featured").notNull().default(false),
+  // Default true so existing rows stay visible; new autosaved drafts set false.
+  published: boolean("published").notNull().default(true),
 
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
 export const leads = pgTable("leads", {
