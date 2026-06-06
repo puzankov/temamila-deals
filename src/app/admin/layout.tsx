@@ -12,7 +12,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <div>
       {authed && (
-        <div className="border-b border-slate-200 bg-slate-900 text-white">
+        <div className="border-b border-navy-light bg-navy text-white">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
             <div className="flex items-center gap-4 text-sm">
               <Link href="/admin" className="font-semibold">Admin</Link>

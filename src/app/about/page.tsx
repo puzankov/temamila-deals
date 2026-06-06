@@ -1,15 +1,15 @@
 export const metadata = {
   title: "About",
-  description: "How Temamila Deals sources, underwrites, and packages real estate deals.",
+  description: "How SmartDeal365 sources, underwrites, and packages real estate deals.",
 };
 
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-16">
-      <h1 className="text-3xl font-bold text-slate-900">About Temamila Deals</h1>
+      <h1 className="text-3xl font-bold text-slate-900">About SmartDeal365</h1>
       <div className="prose mt-6 space-y-4 text-slate-700">
         <p>
-          Temamila Deals is a curated source of off-market and creative-finance
+          SmartDeal365 is a curated source of off-market and creative-finance
           real estate opportunities. We find properties that don&apos;t fit the
           traditional MLS-and-bank mold and package them so investors can act
           quickly and confidently.

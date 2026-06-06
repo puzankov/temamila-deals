@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export function SiteFooter() {
@@ -6,10 +7,10 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 md:grid-cols-4">
         <div className="sm:col-span-2">
           <div className="flex items-center gap-2">
-            <span className="brand-gradient flex h-8 w-8 items-center justify-center rounded-lg font-bold text-white">
-              T
+            <Image src="/smartdeal-mark.png" alt="SmartDeal365" width={32} height={32} className="h-8 w-8" />
+            <span className="text-lg font-bold text-navy">
+              SmartDeal<span className="text-brand">365</span>
             </span>
-            <span className="text-lg font-bold">Temamila Deals</span>
           </div>
           <p className="mt-3 max-w-sm text-sm text-slate-600">
             Curated off-market and creative-finance real estate deals. New
@@ -30,13 +31,13 @@ export function SiteFooter() {
           <h3 className="text-sm font-semibold text-slate-900">Get in touch</h3>
           <ul className="mt-3 space-y-2 text-sm text-slate-600">
             <li><Link href="/contact" className="hover:text-slate-900">Contact us</Link></li>
-            <li><a href="mailto:info@temamila.com" className="hover:text-slate-900">info@temamila.com</a></li>
+            <li><a href="mailto:info@smartdeal365.com" className="hover:text-slate-900">info@smartdeal365.com</a></li>
           </ul>
         </div>
       </div>
       <div className="border-t border-slate-200">
         <div className="mx-auto max-w-6xl px-4 py-4 text-xs text-slate-500">
-          © {new Date().getFullYear()} Temamila Deals. All information deemed
+          © {new Date().getFullYear()} SmartDeal365. All information deemed
           reliable but not guaranteed. Not financial advice.
         </div>
       </div>

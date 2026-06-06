@@ -2,7 +2,7 @@ import { ContactForm } from "@/components/contact-form";
 
 export const metadata = {
   title: "Contact",
-  description: "Join the Temamila Deals buyers list or get in touch.",
+  description: "Join the SmartDeal365 buyers list or get in touch.",
 };
 
 export default function ContactPage() {
@@ -19,8 +19,8 @@ export default function ContactPage() {
           <div className="mt-8 space-y-2 text-sm text-slate-600">
             <p>
               <span className="font-medium text-slate-900">Email:</span>{" "}
-              <a href="mailto:info@temamila.com" className="text-brand-dark hover:underline">
-                info@temamila.com
+              <a href="mailto:info@smartdeal365.com" className="text-brand-dark hover:underline">
+                info@smartdeal365.com
               </a>
             </p>
           </div>

@@ -1,6 +1,6 @@
 export const metadata = {
   title: "FAQ",
-  description: "Common questions about buying creative-finance real estate deals from Temamila.",
+  description: "Common questions about buying creative-finance real estate deals from SmartDeal365.",
 };
 
 const FAQS = [
@@ -18,7 +18,7 @@ const FAQS = [
   },
   {
     q: "Do you represent me as an agent?",
-    a: "No. Temamila Deals is not acting as your real estate agent or financial advisor. We provide information on opportunities; you should perform your own due diligence and consult your own professionals.",
+    a: "No. SmartDeal365 is not acting as your real estate agent or financial advisor. We provide information on opportunities; you should perform your own due diligence and consult your own professionals.",
   },
   {
     q: "How often are new deals added?",

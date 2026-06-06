@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
       // image host (e.g. Vercel Blob) when wiring up the database.
       { protocol: "https", hostname: "picsum.photos" },
       { protocol: "https", hostname: "fastly.picsum.photos" },
+      // Hero background photo (swap for your own asset anytime).
+      { protocol: "https", hostname: "images.unsplash.com" },
     ],
   },
 };

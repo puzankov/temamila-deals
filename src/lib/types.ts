@@ -1,4 +1,4 @@
-// Core domain types for Temamila Deals.
+// Core domain types for SmartDeal365.
 // Kept framework-agnostic so the data source can swap from seed data to a DB later.
 
 export const DEAL_TYPES = [

@@ -1,6 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
 import { DealCard } from "@/components/deal-card";
 import { getFeaturedDeals } from "@/lib/deals";
+
+// Hero background photo. Swap this URL (or drop a file in /public and use "/your.jpg").
+const HERO_IMAGE =
+  "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=2400&q=80";
 
 export default async function HomePage() {
   const featured = await getFeaturedDeals(3);
@@ -8,18 +13,30 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="brand-gradient absolute inset-0 opacity-[0.06]" />
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:py-28">
+      <section className="relative isolate overflow-hidden bg-navy">
+        {/* Background photo */}
+        <Image
+          src={HERO_IMAGE}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="-z-10 object-cover"
+        />
+        {/* Brand overlay for text contrast */}
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy/95 via-navy/80 to-navy/40" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-navy/70 to-transparent" />
+
+        <div className="mx-auto max-w-6xl px-4 py-24 sm:py-32">
           <div className="max-w-2xl">
-            <span className="inline-flex items-center rounded-full bg-brand-tint px-3 py-1 text-sm font-medium text-brand-dark">
+            <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-sm font-medium text-white ring-1 ring-inset ring-white/20 backdrop-blur">
               New deals added weekly
             </span>
-            <h1 className="mt-5 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
+            <h1 className="mt-5 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
               Curated real estate deals,{" "}
-              <span className="text-gradient">creatively financed.</span>
+              <span className="text-brand">creatively financed.</span>
             </h1>
-            <p className="mt-5 text-lg text-slate-600">
+            <p className="mt-5 text-lg text-slate-200">
               Off-market and creative-finance opportunities — seller finance,
               subject-to, cash, fix &amp; flip, and short-term rentals.
               Underwritten, packaged, and ready to close.
@@ -27,13 +44,13 @@ export default async function HomePage() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/deals"
-                className="brand-gradient rounded-full px-6 py-3 font-semibold text-white shadow-sm transition hover:opacity-90"
+                className="brand-gradient rounded-full px-6 py-3 font-semibold text-white shadow-lg transition hover:opacity-90"
               >
                 Browse all deals
               </Link>
               <Link
                 href="/contact"
-                className="rounded-full border border-slate-300 px-6 py-3 font-semibold text-slate-700 transition hover:border-slate-400"
+                className="rounded-full border border-white/30 px-6 py-3 font-semibold text-white transition hover:bg-white/10"
               >
                 Get on the buyers list
               </Link>

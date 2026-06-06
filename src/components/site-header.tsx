@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const NAV = [
@@ -12,11 +13,16 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <span className="brand-gradient flex h-8 w-8 items-center justify-center rounded-lg font-bold text-white">
-            T
-          </span>
-          <span className="text-lg font-bold tracking-tight">
-            Temamila <span className="text-gradient">Deals</span>
+          <Image
+            src="/smartdeal-mark.png"
+            alt="SmartDeal365"
+            width={36}
+            height={36}
+            priority
+            className="h-9 w-9"
+          />
+          <span className="text-lg font-bold tracking-tight text-navy">
+            SmartDeal<span className="text-brand">365</span>
           </span>
         </Link>
 

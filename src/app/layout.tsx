@@ -6,15 +6,15 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://temamila.com"),
+  metadataBase: new URL("https://smartdeal365.com"),
   title: {
-    default: "Temamila Deals — Curated Real Estate Investment Deals",
-    template: "%s · Temamila Deals",
+    default: "SmartDeal365 — Curated Real Estate Investment Deals",
+    template: "%s · SmartDeal365",
   },
   description:
     "Browse curated off-market and creative-finance real estate deals — seller finance, subject-to, cash, fix & flip, STR and more.",
   openGraph: {
-    title: "Temamila Deals",
+    title: "SmartDeal365",
     description: "Curated off-market and creative-finance real estate deals.",
     type: "website",
   },
