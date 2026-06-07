@@ -2,15 +2,22 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
-import { DEAL_TYPES } from "@/lib/types";
+import type { DealType } from "@/lib/types";
 
 const SORTS = [
-  { value: "newest", label: "Newest" },
+  { value: "newest", label: "Newest first" },
+  { value: "oldest", label: "Oldest first" },
   { value: "price_asc", label: "Price: Low to High" },
   { value: "price_desc", label: "Price: High to Low" },
 ];
 
-export function DealFilters() {
+export function DealFilters({
+  states,
+  dealTypes,
+}: {
+  states: string[];
+  dealTypes: DealType[];
+}) {
   const router = useRouter();
   const params = useSearchParams();
 
@@ -28,7 +35,7 @@ export function DealFilters() {
 
   return (
     <div className="space-y-4">
-      {/* Search + sort row */}
+      {/* Search + state + sort row */}
       <div className="flex flex-col gap-3 sm:flex-row">
         <input
           type="search"
@@ -37,6 +44,20 @@ export function DealFilters() {
           onChange={(e) => setParam("q", e.target.value)}
           className="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/30"
         />
+        {states.length > 0 && (
+          <select
+            value={params.get("state") ?? ""}
+            onChange={(e) => setParam("state", e.target.value)}
+            className="rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/30"
+          >
+            <option value="">All states</option>
+            {states.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+        )}
         <select
           defaultValue={params.get("sort") ?? "newest"}
           onChange={(e) => setParam("sort", e.target.value)}
@@ -50,12 +71,12 @@ export function DealFilters() {
         </select>
       </div>
 
-      {/* Deal-type tag chips */}
+      {/* Deal-type tag chips — only types that have deals */}
       <div className="flex flex-wrap gap-2">
         <Chip active={activeType === ""} onClick={() => setParam("dealType", "")}>
           All types
         </Chip>
-        {DEAL_TYPES.map((t) => (
+        {dealTypes.map((t) => (
           <Chip
             key={t}
             active={activeType === t}

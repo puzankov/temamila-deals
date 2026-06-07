@@ -2,6 +2,7 @@ import { and, asc, desc, eq, gte, ilike, lte, or, type SQL } from "drizzle-orm";
 import { getDb, hasDb } from "@/db";
 import { deals as dealsTable, type DealRow, type NewDealRow } from "@/db/schema";
 import { SEED_DEALS } from "./seed-data";
+import { DEAL_TYPES } from "./types";
 import type { Deal, DealStatus, DealType } from "./types";
 
 // Data access layer. Uses Postgres when DATABASE_URL is configured; otherwise
@@ -9,12 +10,23 @@ import type { Deal, DealStatus, DealType } from "./types";
 
 export interface DealFilters {
   q?: string;
+  state?: string;
   dealType?: DealType;
   status?: DealStatus;
   minPrice?: number;
   maxPrice?: number;
   minBeds?: number;
-  sort?: "newest" | "price_asc" | "price_desc";
+  sort?: "newest" | "oldest" | "price_asc" | "price_desc";
+}
+
+// Filter facets derived from published deals: which states and deal types
+// actually have listings (so the UI only offers non-empty options).
+export async function getDealFacets(): Promise<{ states: string[]; dealTypes: DealType[] }> {
+  const all = await getAllDeals();
+  const states = [...new Set(all.map((d) => d.state).filter(Boolean))].sort();
+  const present = new Set(all.flatMap((d) => d.dealTypes));
+  const dealTypes = DEAL_TYPES.filter((t) => present.has(t));
+  return { states, dealTypes };
 }
 
 function rowToDeal(r: DealRow): Deal {
@@ -101,6 +113,7 @@ export async function getFilteredDeals(filters: DealFilters): Promise<Deal[]> {
       )!,
     );
   }
+  if (filters.state) conds.push(eq(dealsTable.state, filters.state));
   if (filters.status) conds.push(eq(dealsTable.status, filters.status));
   if (filters.minPrice != null) conds.push(gte(dealsTable.purchasePrice, filters.minPrice));
   if (filters.maxPrice != null) conds.push(lte(dealsTable.purchasePrice, filters.maxPrice));
@@ -111,7 +124,9 @@ export async function getFilteredDeals(filters: DealFilters): Promise<Deal[]> {
       ? asc(dealsTable.purchasePrice)
       : filters.sort === "price_desc"
         ? desc(dealsTable.purchasePrice)
-        : desc(dealsTable.createdAt);
+        : filters.sort === "oldest"
+          ? asc(dealsTable.createdAt)
+          : desc(dealsTable.createdAt);
 
   const rows = await getDb()
     .select()
@@ -133,6 +148,7 @@ function filterSeed(filters: DealFilters): Deal[] {
       [d.address, d.city, d.state, d.zip].some((f) => f.toLowerCase().includes(q)),
     );
   }
+  if (filters.state) deals = deals.filter((d) => d.state === filters.state);
   if (filters.dealType) deals = deals.filter((d) => d.dealTypes.includes(filters.dealType!));
   if (filters.status) deals = deals.filter((d) => d.status === filters.status);
   if (filters.minPrice != null) deals = deals.filter((d) => d.purchasePrice >= filters.minPrice!);
@@ -144,6 +160,9 @@ function filterSeed(filters: DealFilters): Deal[] {
       break;
     case "price_desc":
       deals.sort((a, b) => b.purchasePrice - a.purchasePrice);
+      break;
+    case "oldest":
+      deals.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
       break;
     default:
       deals.sort((a, b) => b.createdAt.localeCompare(a.createdAt));

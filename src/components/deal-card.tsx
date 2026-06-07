@@ -39,7 +39,7 @@ export function DealCard({ deal }: { deal: Deal }) {
             {formatCurrency(deal.purchasePrice)}
           </span>
           <span className="text-sm text-slate-500">
-            {deal.beds} bd · {deal.baths} ba
+            {deal.beds} bd · {deal.baths} ba{deal.sqft ? ` · ${deal.sqft.toLocaleString()} sqft` : ""}
           </span>
         </div>
 

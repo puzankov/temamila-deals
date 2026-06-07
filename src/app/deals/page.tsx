@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { DealCard } from "@/components/deal-card";
 import { DealFilters } from "@/components/deal-filters";
-import { getFilteredDeals, type DealFilters as Filters } from "@/lib/deals";
+import { getDealFacets, getFilteredDeals, type DealFilters as Filters } from "@/lib/deals";
 import { DEAL_TYPES, type DealType } from "@/lib/types";
 
 export const metadata = {
@@ -17,15 +17,17 @@ function parseFilters(sp: Record<string, string | string[] | undefined>): Filter
   const sort = get("sort");
   return {
     q: get("q") || undefined,
+    state: get("state") || undefined,
     dealType: DEAL_TYPES.includes(dealType as DealType) ? (dealType as DealType) : undefined,
-    sort: sort === "price_asc" || sort === "price_desc" ? sort : "newest",
+    sort:
+      sort === "price_asc" || sort === "price_desc" || sort === "oldest" ? sort : "newest",
   };
 }
 
 export default async function DealsPage({ searchParams }: { searchParams: SearchParams }) {
   const sp = await searchParams;
   const filters = parseFilters(sp);
-  const deals = await getFilteredDeals(filters);
+  const [deals, facets] = await Promise.all([getFilteredDeals(filters), getDealFacets()]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
@@ -37,7 +39,7 @@ export default async function DealsPage({ searchParams }: { searchParams: Search
       </header>
 
       <Suspense fallback={<div className="h-24" />}>
-        <DealFilters />
+        <DealFilters states={facets.states} dealTypes={facets.dealTypes} />
       </Suspense>
 
       <p className="mt-6 text-sm text-slate-500">
