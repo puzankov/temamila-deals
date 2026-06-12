@@ -81,11 +81,11 @@ function emailBase({
 
           <!-- ── Header ── -->
           <tr>
-            <td style="background:#041f48;padding:28px 36px">
+            <td style="background:#0d1b2a;padding:10px 36px">
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="vertical-align:middle">
-                    <img src="${COMPANY_LOGO_DARK_URL}" height="44" alt="${COMPANY_NAME}"
+                    <img src="${COMPANY_LOGO_DARK_URL}" height="54" alt="${COMPANY_NAME}"
                       style="display:block;border-radius:8px" />
                   </td>
                 </tr>
@@ -167,7 +167,7 @@ export function buildDealRequestEmail(data: {
 }) {
   const displayAddress = data.dealAddress || data.dealSlug;
   const dealUrl = `${COMPANY_URL}/deals/${data.dealSlug}`;
-  const subject = `🏠 New deal request — ${displayAddress}`;
+  const subject = `🏠 [Deal request] ${displayAddress}`;
 
   const rows: [string, string][] = [
     ["Name", data.name],
