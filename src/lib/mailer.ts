@@ -85,11 +85,8 @@ function emailBase({
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="vertical-align:middle">
-                    <img src="${COMPANY_LOGO_DARK_URL}" width="44" height="44" alt="${COMPANY_NAME}"
-                      style="display:inline-block;vertical-align:middle;border-radius:8px;margin-right:12px" />
-                    <span style="display:inline-block;vertical-align:middle;font-size:22px;font-weight:700;color:#ffffff;letter-spacing:-0.3px">
-                      ${COMPANY_NAME}
-                    </span>
+                    <img src="${COMPANY_LOGO_DARK_URL}" height="44" alt="${COMPANY_NAME}"
+                      style="display:block;border-radius:8px" />
                   </td>
                 </tr>
               </table>
