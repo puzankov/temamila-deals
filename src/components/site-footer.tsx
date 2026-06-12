@@ -31,6 +31,7 @@ export function SiteFooter() {
           <h3 className="text-sm font-semibold text-slate-900">Get in touch</h3>
           <ul className="mt-3 space-y-2 text-sm text-slate-600">
             <li><Link href="/contact" className="hover:text-slate-900">Contact us</Link></li>
+            <li><a href="tel:+13212098087" className="hover:text-slate-900">(321) 209-8087</a></li>
             <li><a href="mailto:info@smartdeal365.com" className="hover:text-slate-900">info@smartdeal365.com</a></li>
           </ul>
         </div>
