@@ -93,20 +93,23 @@ export function DealForm({ deal }: { deal?: Deal }) {
 
         <Card title="Property">
           <div className="flex flex-wrap items-start gap-x-8 gap-y-4">
-            <QuickNumber name="beds" label="Beds" defaultValue={deal?.beds} />
-            <QuickNumber name="baths" label="Baths" defaultValue={deal?.baths} step="0.5" />
+            <QuickNumber name="beds" label="Beds" defaultValue={deal?.beds} min={0} max={50} />
+            <QuickNumber name="baths" label="Baths" defaultValue={deal?.baths} step="0.5" min={0} max={20} />
             <div className="w-24">
-              <Num label="Sqft" name="sqft" value={deal?.sqft} />
+              <Num label="Sqft" name="sqft" value={deal?.sqft} min={1} />
+            </div>
+            <div className="w-28">
+              <Num label="Year Built" name="yearBuilt" value={deal?.yearBuilt} min={1900} max={new Date().getFullYear() + 5} />
             </div>
           </div>
         </Card>
 
         <Card title="Financials">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <Num label="Purchase $" name="purchasePrice" value={deal?.purchasePrice} />
-            <Num label="Entry fee $" name="entryFee" value={deal?.entryFee} />
-            <Num label="Rate %" name="interestRate" value={deal?.interestRate} step="any" />
-            <Num label="Monthly $" name="monthlyPayment" value={deal?.monthlyPayment} />
+            <Num label="Purchase $" name="purchasePrice" value={deal?.purchasePrice} min={0} />
+            <Num label="Entry fee $" name="entryFee" value={deal?.entryFee} min={0} />
+            <Num label="Rate %" name="interestRate" value={deal?.interestRate} step="any" min={0} max={100} />
+            <Num label="Monthly $" name="monthlyPayment" value={deal?.monthlyPayment} min={0} />
           </div>
         </Card>
 
@@ -169,6 +172,28 @@ export function DealForm({ deal }: { deal?: Deal }) {
             <div className="mt-1">
               <ImageUploader name="images" initial={deal?.images} />
             </div>
+          </div>
+
+          <div className="mt-4">
+            <label className="text-xs text-slate-500">Zillow URL (optional)</label>
+            <input
+              name="zillowUrl"
+              type="url"
+              defaultValue={deal?.zillowUrl ?? ""}
+              placeholder="https://www.zillow.com/homes/..."
+              className={`mt-1 ${inputCls}`}
+            />
+          </div>
+
+          <div className="mt-4">
+            <label className="text-xs text-slate-500">Direct Contact Phone (optional — overrides default button)</label>
+            <input
+              name="directPhone"
+              type="tel"
+              defaultValue={deal?.directPhone ?? ""}
+              placeholder="(321) 000-0000"
+              className={`mt-1 ${inputCls}`}
+            />
           </div>
         </Card>
 
@@ -273,16 +298,20 @@ function Num({
   name,
   value,
   step,
+  min,
+  max,
 }: {
   label: string;
   name: string;
   value?: number;
   step?: string;
+  min?: number;
+  max?: number;
 }) {
   return (
     <div>
       <label className="text-xs text-slate-500">{label}</label>
-      <input name={name} type="number" step={step} defaultValue={value ?? ""} className={inputCls} />
+      <input name={name} type="number" step={step} min={min} max={max} defaultValue={value ?? ""} className={inputCls} />
     </div>
   );
 }

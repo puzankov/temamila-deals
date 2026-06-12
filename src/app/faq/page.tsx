@@ -22,7 +22,7 @@ const FAQS = [
   },
   {
     q: "How often are new deals added?",
-    a: "We add new inventory regularly. The best way to see deals first is to join the buyers list on our contact page.",
+    a: "We add new inventory regularly. The best way to see deals first is to join the buyers list.",
   },
 ];
 

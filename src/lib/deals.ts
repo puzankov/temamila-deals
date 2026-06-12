@@ -42,6 +42,7 @@ function rowToDeal(r: DealRow): Deal {
     beds: r.beds,
     baths: r.baths,
     sqft: r.sqft ?? undefined,
+    yearBuilt: r.yearBuilt ?? undefined,
     purchasePrice: r.purchasePrice,
     entryFee: r.entryFee,
     interestRate: r.interestRate ?? undefined,
@@ -50,6 +51,8 @@ function rowToDeal(r: DealRow): Deal {
     status: r.status as DealStatus,
     description: r.description,
     images: r.images,
+    zillowUrl: r.zillowUrl ?? undefined,
+    directPhone: r.directPhone ?? undefined,
     featured: r.featured,
     published: r.published,
     createdAt:

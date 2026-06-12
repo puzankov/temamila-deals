@@ -29,7 +29,7 @@ export default function AboutPage() {
         </p>
         <p>
           Want first access to new inventory?{" "}
-          <a href="/contact" className="font-medium text-brand-dark hover:underline">
+          <a href="/buyers-list" className="font-medium text-brand-dark hover:underline">
             Get on the buyers list
           </a>
           .

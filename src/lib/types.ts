@@ -36,12 +36,17 @@ export interface Deal {
   beds: number;
   baths: number;
   sqft?: number;
+  yearBuilt?: number;
 
   // Financials
   purchasePrice: number;
   entryFee: number; // cash to get in (down payment / assignment / entry fee)
   interestRate?: number; // for creative-finance deals, annual %
   monthlyPayment?: number; // PITI or note payment
+
+  // External links
+  zillowUrl?: string;
+  directPhone?: string;
 
   // Presentation
   dealTypes: DealType[];

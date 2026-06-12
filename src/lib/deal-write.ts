@@ -48,6 +48,7 @@ export function parseDealForm(formData: FormData): Omit<NewDealRow, "slug"> {
     beds: numOrNull(formData, "beds") ?? 0,
     baths: numOrNull(formData, "baths") ?? 0,
     sqft: numOrNull(formData, "sqft"),
+    yearBuilt: numOrNull(formData, "yearBuilt"),
     purchasePrice: numOrNull(formData, "purchasePrice") ?? 0,
     entryFee: numOrNull(formData, "entryFee") ?? 0,
     interestRate: numOrNull(formData, "interestRate"),
@@ -56,6 +57,8 @@ export function parseDealForm(formData: FormData): Omit<NewDealRow, "slug"> {
     status,
     description: String(formData.get("description") ?? "").trim(),
     images,
+    zillowUrl: String(formData.get("zillowUrl") ?? "").trim() || null,
+    directPhone: String(formData.get("directPhone") ?? "").trim() || null,
     featured: boolFrom(formData, "featured"),
     published: boolFrom(formData, "published"),
   };

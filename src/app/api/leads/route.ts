@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
-import { getDb, hasDb } from "@/db";
-import { leads } from "@/db/schema";
+import { sendEmail, buildDealRequestEmail, buildBuyBoxEmail } from "@/lib/mailer";
 
-// Lead intake endpoint. Persists to Postgres when configured.
-// TODO(next): email notification via Resend.
 export async function POST(request: Request) {
   let body: Record<string, unknown>;
   try {
@@ -26,18 +23,26 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
   }
 
-  const lead = {
-    dealSlug,
-    name,
-    email,
-    phone: String(body.phone ?? "").trim() || null,
-    message: String(body.message ?? "").trim() || null,
-  };
+  const phone = String(body.phone ?? "").trim() || null;
+  const message = String(body.message ?? "").trim() || null;
 
-  if (hasDb) {
-    await getDb().insert(leads).values(lead);
-  } else {
-    console.log("[lead] received (no DB configured)", lead);
+  try {
+    if (dealSlug === "buyers-list") {
+      let buyBox: Record<string, unknown> = {};
+      try {
+        buyBox = message ? JSON.parse(message) : {};
+      } catch {
+        buyBox = { raw: message };
+      }
+      const mail = buildBuyBoxEmail({ name, email, phone, buyBox });
+      await sendEmail(mail);
+    } else {
+      const mail = buildDealRequestEmail({ name, email, phone, dealSlug, message });
+      await sendEmail(mail);
+    }
+  } catch (err) {
+    console.error("[mailer] unexpected error", err);
+    return NextResponse.json({ error: "Failed to send notification" }, { status: 500 });
   }
 
   return NextResponse.json({ ok: true });

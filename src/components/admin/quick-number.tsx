@@ -21,12 +21,16 @@ export function QuickNumber({
   defaultValue,
   options = [1, 2, 3, 4, 5],
   step,
+  min,
+  max,
 }: {
   name: string;
   label: string;
   defaultValue?: number;
   options?: number[];
   step?: string;
+  min?: number;
+  max?: number;
 }) {
   const save = useAutosave();
   const presets = new Set(options);
@@ -64,6 +68,8 @@ export function QuickNumber({
           <input
             type="number"
             step={step}
+            min={min}
+            max={max}
             autoFocus
             value={value ?? ""}
             onChange={(e) => setValue(e.target.value === "" ? null : Number(e.target.value))}

@@ -25,12 +25,17 @@ export const deals = pgTable("deals", {
   beds: integer("beds").notNull().default(0),
   baths: real("baths").notNull().default(0),
   sqft: integer("sqft"),
+  yearBuilt: integer("year_built"),
 
   // Financials (whole dollars)
   purchasePrice: integer("purchase_price").notNull().default(0),
   entryFee: integer("entry_fee").notNull().default(0),
   interestRate: real("interest_rate"),
   monthlyPayment: integer("monthly_payment"),
+
+  // External links
+  zillowUrl: text("zillow_url"),
+  directPhone: text("direct_phone"),
 
   // Presentation
   dealTypes: text("deal_types").array().notNull().default([]),

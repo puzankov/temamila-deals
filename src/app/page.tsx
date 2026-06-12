@@ -52,7 +52,7 @@ export default async function HomePage() {
                 Browse all deals
               </Link>
               <Link
-                href="/contact"
+                href="/buyers-list"
                 className="rounded-full border border-white/30 px-6 py-3 font-semibold text-white transition hover:bg-white/10"
               >
                 Get on the buyers list

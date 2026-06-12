@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { LeadForm } from "@/components/lead-form";
+import { CONTACT_PHONE, CONTACT_PHONE_TEL } from "@/lib/config";
 import { PropertyGallery } from "@/components/property-gallery";
 import { PropertyMap } from "@/components/property-map";
 import { BedIcon, BathIcon, RulerIcon } from "@/components/property-icons";
@@ -75,50 +76,82 @@ export default async function DealDetailPage({ params }: { params: Params }) {
         />
       </div>
 
-      <div className="mt-8 grid gap-10 lg:grid-cols-3">
+      <div className="mt-3 grid gap-3 lg:grid-cols-3">
         {/* Main column */}
-        <div className="lg:col-span-2">
-          <div className="flex flex-wrap items-center gap-3">
-            <StatusBadge status={deal.status} />
-            {deal.dealTypes.map((t) => (
-              <span key={t} className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700">
-                {t}
-              </span>
-            ))}
-          </div>
+        <div className="lg:col-span-2 space-y-6">
+          {/* Title + info */}
+          <div>
+            <div className="flex flex-wrap items-center gap-3">
+              <StatusBadge status={deal.status} />
+              {deal.dealTypes.map((t) => (
+                <span key={t} className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700">
+                  {t}
+                </span>
+              ))}
+            </div>
 
-          <h1 className="mt-3 text-3xl font-bold text-slate-900">{deal.address}</h1>
-          <p className="text-slate-600">
-            {deal.city}, {deal.state} {deal.zip}
-          </p>
+            <div className="mt-3 flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+              <div>
+                <h1 className="text-3xl font-bold text-slate-900">{deal.address}</h1>
+                <p className="text-slate-600">
+                  {deal.city}, {deal.state} {deal.zip}
+                </p>
+              </div>
+              {deal.zillowUrl && (
+                <a
+                  href={deal.zillowUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex shrink-0 items-center gap-2 rounded-xl border-2 border-[#006aff] px-4 py-2 text-sm font-bold text-[#006aff] transition hover:bg-[#006aff]/5"
+                >
+                  <svg viewBox="0 0 52 52" className="h-4 w-4 shrink-0 fill-[#006aff]">
+                    <path d="M26 2L2 22.4h7.3V50h13.6V35.5h6.2V50h13.6V22.4H50L26 2z" />
+                  </svg>
+                  View on Zillow
+                </a>
+              )}
+            </div>
 
-          <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-slate-700">
-            <span className="inline-flex items-center gap-1.5">
-              <BedIcon className="h-5 w-5 text-slate-400" />
-              <strong>{deal.beds}</strong> beds
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <BathIcon className="h-5 w-5 text-slate-400" />
-              <strong>{deal.baths}</strong> baths
-            </span>
-            {deal.sqft && (
+            <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-slate-700">
               <span className="inline-flex items-center gap-1.5">
-                <RulerIcon className="h-5 w-5 text-slate-400" />
-                <strong>{deal.sqft.toLocaleString()}</strong> sqft
+                <BedIcon className="h-5 w-5 text-slate-400" />
+                <strong>{deal.beds}</strong> beds
               </span>
-            )}
+              <span className="inline-flex items-center gap-1.5">
+                <BathIcon className="h-5 w-5 text-slate-400" />
+                <strong>{deal.baths}</strong> baths
+              </span>
+              {deal.sqft && (
+                <span className="inline-flex items-center gap-1.5">
+                  <RulerIcon className="h-5 w-5 text-slate-400" />
+                  <strong>{deal.sqft.toLocaleString()}</strong> sqft
+                </span>
+              )}
+              {deal.yearBuilt && (
+                <span className="inline-flex items-center gap-1.5">
+                  <svg className="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                    <rect x="3" y="4" width="18" height="18" rx="2" />
+                    <path strokeLinecap="round" d="M16 2v4M8 2v4M3 10h18" />
+                  </svg>
+                  Built <strong>{deal.yearBuilt}</strong>
+                </span>
+              )}
+            </div>
+
+            {/* Price block — mobile only */}
+            <div className="mt-4 lg:hidden">
+              <PriceCard deal={deal} />
+            </div>
           </div>
 
-          {/* Price block — shown here on mobile (above the description) */}
-          <div className="mt-6 lg:hidden">
-            <PriceCard deal={deal} />
+          {/* Description */}
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">About this deal</h2>
+            <div
+              className="prose prose-slate mt-3 max-w-none [&_li]:my-0.5 [&_li>p]:my-0 [&_ol]:my-2 [&_p]:my-2 [&_ul]:my-2"
+              dangerouslySetInnerHTML={{ __html: deal.description }}
+            />
           </div>
-
-          <h2 className="mt-8 text-lg font-semibold text-slate-900">About this deal</h2>
-          <div
-            className="prose prose-slate mt-2 max-w-none [&_li]:my-0.5 [&_li>p]:my-0 [&_ol]:my-2 [&_p]:my-2 [&_ul]:my-2"
-            dangerouslySetInnerHTML={{ __html: deal.description }}
-          />
 
           {/* Location map */}
           {deal.lat != null && deal.lng != null && (
@@ -136,13 +169,13 @@ export default async function DealDetailPage({ params }: { params: Params }) {
         </div>
 
         {/* Sidebar: financials (desktop only) + lead form */}
-        <aside className="space-y-6">
+        <aside className="space-y-3">
           <div className="hidden lg:block">
             <PriceCard deal={deal} />
           </div>
 
           <a
-            href="tel:+13212098087"
+            href={`tel:${deal.directPhone ? deal.directPhone.replace(/\D/g, "").replace(/^/, "+1") : CONTACT_PHONE_TEL}`}
             className="brand-gradient flex items-center gap-4 rounded-2xl px-6 py-5 text-white shadow-lg transition hover:opacity-90 active:scale-[0.98]"
           >
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/20">
@@ -152,7 +185,7 @@ export default async function DealDetailPage({ params }: { params: Params }) {
             </span>
             <div>
               <div className="text-sm font-medium opacity-90">Interested in this deal?</div>
-              <div className="text-xl font-bold tracking-wide">(321) 209-8087</div>
+              <div className="text-xl font-bold tracking-wide">{deal.directPhone ?? CONTACT_PHONE}</div>
             </div>
           </a>
 
