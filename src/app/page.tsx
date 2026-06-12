@@ -108,87 +108,99 @@ function ValueProposition() {
 
         <div className="mt-14 grid gap-6 sm:grid-cols-3">
           {/* Card 1 */}
-          <div className="group flex flex-col rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition hover:shadow-md hover:-translate-y-0.5">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-tint text-brand">
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
-              </svg>
+          <div className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md hover:-translate-y-0.5">
+            <div className="brand-gradient flex items-center gap-3 px-6 py-4">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/15 text-white">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold text-white">Fresh Daily Deal Inventory</h3>
             </div>
-            <h3 className="mt-5 text-xl font-bold text-slate-900">Fresh Daily Deal Inventory</h3>
-            <ul className="mt-4 flex-1 space-y-3">
-              {[
-                "100+ exclusive and partner deals updated daily on our platform.",
-                "Nationwide creative inventory: Seller Financing, Subject-To, Novations, and deep-discount wholesale deals.",
-                "Transparent underwriting with crystal-clear numbers and projected ROI designed around your goals.",
-              ].map((line) => (
-                <li key={line} className="flex gap-2.5 text-sm text-slate-600">
-                  <span className="mt-0.5 h-4 w-4 shrink-0 rounded-full bg-brand-tint text-brand flex items-center justify-center text-[10px] font-bold">✓</span>
-                  {line}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-6">
-              <Link href="/deals" className="brand-gradient inline-flex w-full items-center justify-center rounded-xl px-5 py-3 text-sm font-bold text-white transition hover:opacity-90">
-                Find Your Next Deal
-              </Link>
+            <div className="flex flex-1 flex-col p-6">
+              <ul className="flex-1 space-y-3">
+                {[
+                  "100+ exclusive and partner deals updated daily on our platform.",
+                  "Nationwide creative inventory: Seller Financing, Subject-To, Novations, and deep-discount wholesale deals.",
+                  "Transparent underwriting with crystal-clear numbers and projected ROI designed around your goals.",
+                ].map((line) => (
+                  <li key={line} className="flex gap-2.5 text-sm text-slate-600">
+                    <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-brand-tint text-[10px] font-bold text-brand">✓</span>
+                    {line}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-6">
+                <Link href="/deals" className="brand-gradient inline-flex w-full items-center justify-center rounded-xl px-5 py-3 text-sm font-bold text-white transition hover:opacity-90">
+                  Find Your Next Deal
+                </Link>
+              </div>
             </div>
           </div>
 
           {/* Card 2 */}
-          <div className="group flex flex-col rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition hover:shadow-md hover:-translate-y-0.5">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-tint text-brand">
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <circle cx="12" cy="12" r="3" /><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="11.5" strokeOpacity=".3" />
-              </svg>
+          <div className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md hover:-translate-y-0.5">
+            <div className="brand-gradient flex items-center gap-3 px-6 py-4">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/15 text-white">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <circle cx="12" cy="12" r="3" /><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="11.5" strokeOpacity=".3" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold text-white">Your Criteria, Our Focus</h3>
             </div>
-            <h3 className="mt-5 text-xl font-bold text-slate-900">Your Criteria, Our Focus</h3>
-            <ul className="mt-4 flex-1 space-y-3">
-              {[
-                "Tired of junk deals? Filter your Buy Box and get sent exactly what fits your precise parameters.",
-                "Book a 1-on-1 strategy session with our acquisitions team to locate target properties faster.",
-                "A perfect blend of boots-on-the-ground real estate expertise and automated, data-driven matching.",
-              ].map((line) => (
-                <li key={line} className="flex gap-2.5 text-sm text-slate-600">
-                  <span className="mt-0.5 h-4 w-4 shrink-0 rounded-full bg-brand-tint text-brand flex items-center justify-center text-[10px] font-bold">✓</span>
-                  {line}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-6 space-y-2">
-              <Link href="/buyers-list" className="brand-gradient inline-flex w-full items-center justify-center rounded-xl px-5 py-3 text-sm font-bold text-white transition hover:opacity-90">
-                Edit My Buy Box
-              </Link>
-              <a href={`tel:${CONTACT_PHONE_TEL}`} className="inline-flex w-full items-center justify-center rounded-xl border border-brand px-5 py-3 text-sm font-bold text-brand transition hover:bg-brand-tint">
-                Schedule Deal Shopping
-              </a>
+            <div className="flex flex-1 flex-col p-6">
+              <ul className="flex-1 space-y-3">
+                {[
+                  "Tired of junk deals? Filter your Buy Box and get sent exactly what fits your precise parameters.",
+                  "Book a 1-on-1 strategy session with our acquisitions team to locate target properties faster.",
+                  "A perfect blend of boots-on-the-ground real estate expertise and automated, data-driven matching.",
+                ].map((line) => (
+                  <li key={line} className="flex gap-2.5 text-sm text-slate-600">
+                    <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-brand-tint text-[10px] font-bold text-brand">✓</span>
+                    {line}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-6 space-y-2">
+                <a href={`tel:${CONTACT_PHONE_TEL}`} className="inline-flex w-full items-center justify-center rounded-xl border border-brand px-5 py-3 text-sm font-bold text-brand transition hover:bg-brand-tint">
+                  Schedule Deal Shopping
+                </a>
+                <Link href="/buyers-list" className="brand-gradient inline-flex w-full items-center justify-center rounded-xl px-5 py-3 text-sm font-bold text-white transition hover:opacity-90">
+                  Add My Buy Box
+                </Link>
+              </div>
             </div>
           </div>
 
           {/* Card 3 */}
-          <div className="group flex flex-col rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition hover:shadow-md hover:-translate-y-0.5">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-tint text-brand">
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+          <div className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md hover:-translate-y-0.5">
+            <div className="brand-gradient flex items-center gap-3 px-6 py-4">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/15 text-white">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold text-white">Seamless Closings, Real Results</h3>
             </div>
-            <h3 className="mt-5 text-xl font-bold text-slate-900">Seamless Closings, Real Results</h3>
-            <ul className="mt-4 flex-1 space-y-3">
-              {[
-                "Backing a community with hundreds of successfully closed transactions across the US.",
-                "Easily track your active contracts, due diligence materials, and incoming properties in real time.",
-                "Dedicated transaction coordinators guide you through every creative escrow step to keep it secure and smooth.",
-              ].map((line) => (
-                <li key={line} className="flex gap-2.5 text-sm text-slate-600">
-                  <span className="mt-0.5 h-4 w-4 shrink-0 rounded-full bg-brand-tint text-brand flex items-center justify-center text-[10px] font-bold">✓</span>
-                  {line}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-6">
-              <Link href="/about" className="brand-gradient inline-flex w-full items-center justify-center rounded-xl px-5 py-3 text-sm font-bold text-white transition hover:opacity-90">
-                Learn About SmartDeal365
-              </Link>
+            <div className="flex flex-1 flex-col p-6">
+              <ul className="flex-1 space-y-3">
+                {[
+                  "Backing a community with hundreds of successfully closed transactions across the US.",
+                  "Easily track your active contracts, due diligence materials, and incoming properties in real time.",
+                  "Dedicated transaction coordinators guide you through every creative escrow step to keep it secure and smooth.",
+                ].map((line) => (
+                  <li key={line} className="flex gap-2.5 text-sm text-slate-600">
+                    <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-brand-tint text-[10px] font-bold text-brand">✓</span>
+                    {line}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-6">
+                <Link href="/about" className="brand-gradient inline-flex w-full items-center justify-center rounded-xl px-5 py-3 text-sm font-bold text-white transition hover:opacity-90">
+                  Learn About SmartDeal365
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -203,12 +215,19 @@ function FeaturedDeals({ deals }: { deals: Awaited<ReturnType<typeof getFeatured
   return (
     <section className="bg-slate-50 py-20">
       <div className="mx-auto max-w-6xl px-4">
-        <div className="flex items-end justify-between">
+        <div className="flex items-end justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">Featured Deals</h2>
-            <p className="mt-1 text-slate-600">A few of this week&apos;s standout opportunities.</p>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700 ring-1 ring-amber-200">
+              <svg className="h-3.5 w-3.5 fill-amber-500" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              Hand-Picked This Week
+            </span>
+            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">Featured Deals</h2>
+            <p className="mt-2 text-lg text-slate-600">A few of this week&apos;s standout opportunities.</p>
           </div>
-          <Link href="/deals" className="text-sm font-semibold text-brand-dark hover:underline">
+          <Link
+            href="/deals"
+            className="brand-gradient shrink-0 rounded-xl px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
+          >
             View all →
           </Link>
         </div>
@@ -233,7 +252,11 @@ function AudienceSegmentation() {
         </svg>
       ),
       title: "Investors",
-      text: "Simplify and scale your portfolio with off-market, high-yield assets. No rigid bank approvals required. We bring you terms and numbers that work.",
+      bullets: [
+        "Scale your portfolio with off-market, high-yield assets",
+        "No rigid bank approvals — creative terms that work for you",
+        "Fully underwritten deals with clear numbers and projected ROI",
+      ],
     },
     {
       icon: (
@@ -242,7 +265,11 @@ function AudienceSegmentation() {
         </svg>
       ),
       title: "Wholesalers",
-      text: "You bring the contract, we bring the buyers. Get immediate underwriting feedback, structural optimization, and disposition power.",
+      bullets: [
+        "You bring the contract — we bring the buyers",
+        "Instant underwriting feedback and structural optimization",
+        "Elite disposition power across our nationwide network",
+      ],
     },
     {
       icon: (
@@ -252,7 +279,11 @@ function AudienceSegmentation() {
         </svg>
       ),
       title: "Connectors",
-      text: "Plug into a premium network built for deal-makers. Monopolize on your real estate leads, leverage our buyers list, and maximize your joint-venture splits.",
+      bullets: [
+        "Plug into a premium deal-maker network",
+        "Leverage our massive buyers list to move inventory fast",
+        "Maximize your joint-venture splits with proven partners",
+      ],
     },
   ];
 
@@ -267,15 +298,27 @@ function AudienceSegmentation() {
         </div>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-3">
-          {groups.map(({ icon, title, text }) => (
-            <div key={title} className="relative overflow-hidden rounded-2xl bg-navy p-8 text-white">
-              <div className="absolute -right-6 -top-6 h-28 w-28 rounded-full bg-brand/10" />
-              <div className="relative">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand/20 text-brand">
+          {groups.map(({ icon, title, bullets }) => (
+            <div key={title} className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+              {/* Header */}
+              <div className="flex items-center gap-3 border-b border-slate-100 bg-navy px-6 py-4">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/10 text-white">
                   {icon}
                 </div>
-                <h3 className="mt-5 text-xl font-bold">{title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-slate-300">{text}</p>
+                <h3 className="text-lg font-bold text-white">{title}</h3>
+              </div>
+              {/* Body */}
+              <div className="flex-1 px-6 py-5">
+                <ul className="space-y-2.5">
+                  {bullets.map((point) => (
+                    <li key={point} className="flex items-start gap-2.5 text-base text-slate-700">
+                      <svg className="mt-0.5 h-5 w-5 shrink-0 text-brand" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                      {point}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           ))}
@@ -341,11 +384,11 @@ function HowItWorks() {
               {i < steps.length - 1 && (
                 <div className="absolute left-[calc(50%+2.5rem)] top-6 hidden h-px w-[calc(100%-5rem)] bg-slate-200 lg:block" />
               )}
-              <div className="relative z-10 flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-md ring-1 ring-slate-200 text-brand">
+              <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-md ring-1 ring-slate-200 text-brand">
                 {icon}
-              </div>
-              <div className="absolute top-0 left-[calc(50%+1.5rem)] flex h-5 w-5 items-center justify-center rounded-full bg-brand text-[10px] font-bold text-white">
-                {i + 1}
+                <div className="absolute -top-3 -right-3 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-brand text-sm font-extrabold text-white shadow-sm">
+                  {i + 1}
+                </div>
               </div>
               <h3 className="mt-5 text-base font-bold text-slate-900">{title}</h3>
               <p className="mt-2 text-sm text-slate-600 leading-relaxed">{text}</p>

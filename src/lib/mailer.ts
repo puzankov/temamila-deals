@@ -1,7 +1,7 @@
 import {
   COMPANY_NAME,
   COMPANY_URL,
-  COMPANY_LOGO_URL,
+  COMPANY_LOGO_DARK_URL,
   COMPANY_DISCLAIMER,
   CONTACT_EMAIL,
   CONTACT_PHONE,
@@ -81,11 +81,11 @@ function emailBase({
 
           <!-- ── Header ── -->
           <tr>
-            <td style="background:linear-gradient(135deg,#089f48 0%,#067a38 100%);padding:28px 36px">
+            <td style="background:#041f48;padding:28px 36px">
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="vertical-align:middle">
-                    <img src="${COMPANY_LOGO_URL}" width="44" height="44" alt="${COMPANY_NAME}"
+                    <img src="${COMPANY_LOGO_DARK_URL}" width="44" height="44" alt="${COMPANY_NAME}"
                       style="display:inline-block;vertical-align:middle;border-radius:8px;margin-right:12px" />
                     <span style="display:inline-block;vertical-align:middle;font-size:22px;font-weight:700;color:#ffffff;letter-spacing:-0.3px">
                       ${COMPANY_NAME}
@@ -165,15 +165,18 @@ export function buildDealRequestEmail(data: {
   email: string;
   phone: string | null;
   dealSlug: string;
+  dealAddress: string | null;
   message: string | null;
 }) {
-  const subject = `🏠 New deal request — ${data.dealSlug}`;
+  const displayAddress = data.dealAddress || data.dealSlug;
+  const dealUrl = `${COMPANY_URL}/deals/${data.dealSlug}`;
+  const subject = `🏠 New deal request — ${displayAddress}`;
 
   const rows: [string, string][] = [
     ["Name", data.name],
     ["Email", `<a href="mailto:${data.email}" style="color:#089f48">${data.email}</a>`],
     ["Phone", data.phone ? `<a href="tel:${data.phone.replace(/\D/g, "").replace(/^/, "+1")}" style="color:#089f48">${data.phone}</a>` : "—"],
-    ["Deal", data.dealSlug],
+    ["Deal", `<a href="${dealUrl}" style="color:#089f48">${displayAddress}</a>`],
     ["Message", data.message || "—"],
   ];
 
@@ -186,9 +189,9 @@ export function buildDealRequestEmail(data: {
     </table>`;
 
   const html = emailBase({
-    preheader: `New deal request from ${data.name} for ${data.dealSlug}`,
-    title: "New Deal Request",
-    subtitle: `Someone is interested in <strong>${data.dealSlug}</strong>`,
+    preheader: `New deal request from ${data.name} for ${displayAddress}`,
+    title: displayAddress,
+    subtitle: `<strong>${data.name}</strong> is interested in this deal`,
     body,
   });
 

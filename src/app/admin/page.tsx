@@ -42,6 +42,7 @@ export default async function AdminDashboard() {
               <th className="px-4 py-3">Sqft</th>
               <th className="px-4 py-3">Types</th>
               <th className="px-4 py-3">Price</th>
+              <th className="px-4 py-3">Created</th>
               <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3">Published</th>
               <th className="px-4 py-3 text-right">Actions</th>
@@ -76,6 +77,9 @@ export default async function AdminDashboard() {
                 </td>
                 <td className="whitespace-nowrap px-4 py-3 font-mono text-slate-900">
                   {formatCurrency(deal.purchasePrice)}
+                </td>
+                <td className="whitespace-nowrap px-4 py-3 text-slate-500">
+                  {new Date(deal.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                 </td>
                 <td className="px-4 py-3">
                   <StatusBadge status={deal.status} />
@@ -115,7 +119,7 @@ export default async function AdminDashboard() {
             ))}
             {deals.length === 0 && (
               <tr>
-                <td colSpan={8} className="px-4 py-10 text-center text-slate-500">
+                <td colSpan={9} className="px-4 py-10 text-center text-slate-500">
                   No deals yet. Create your first one.
                 </td>
               </tr>

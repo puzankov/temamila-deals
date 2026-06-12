@@ -25,6 +25,7 @@ export async function POST(request: Request) {
 
   const phone = String(body.phone ?? "").trim() || null;
   const message = String(body.message ?? "").trim() || null;
+  const dealAddress = String(body.dealAddress ?? "").trim() || null;
 
   try {
     if (dealSlug === "buyers-list") {
@@ -37,7 +38,7 @@ export async function POST(request: Request) {
       const mail = buildBuyBoxEmail({ name, email, phone, buyBox });
       await sendEmail(mail);
     } else {
-      const mail = buildDealRequestEmail({ name, email, phone, dealSlug, message });
+      const mail = buildDealRequestEmail({ name, email, phone, dealSlug, dealAddress, message });
       await sendEmail(mail);
     }
   } catch (err) {

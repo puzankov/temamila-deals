@@ -15,7 +15,7 @@ export function LeadForm({ dealSlug, dealAddress }: { dealSlug: string; dealAddr
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, dealSlug }),
+        body: JSON.stringify({ ...data, dealSlug, dealAddress }),
       });
       if (!res.ok) throw new Error("Request failed");
       setStatus("success");
