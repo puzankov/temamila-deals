@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { sendEmail, buildDealRequestEmail, buildBuyBoxEmail } from "@/lib/mailer";
+import { logDealRequest } from "@/lib/sheets";
+import { COMPANY_URL } from "@/lib/config";
 
 export async function POST(request: Request) {
   let body: Record<string, unknown>;
@@ -38,7 +40,11 @@ export async function POST(request: Request) {
       const mail = buildBuyBoxEmail({ name, email, phone, buyBox });
       await sendEmail(mail);
     } else {
-      const mail = buildDealRequestEmail({ name, email, phone, dealSlug, dealAddress, message });
+      const dealUrl = `${COMPANY_URL}/deals/${dealSlug}`;
+      const [mail] = await Promise.all([
+        Promise.resolve(buildDealRequestEmail({ name, email, phone, dealSlug, dealAddress, message })),
+        logDealRequest({ name, email, phone, dealAddress, dealSlug, dealUrl, message }),
+      ]);
       await sendEmail(mail);
     }
   } catch (err) {
