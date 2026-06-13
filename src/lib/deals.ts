@@ -16,7 +16,7 @@ export interface DealFilters {
   minPrice?: number;
   maxPrice?: number;
   minBeds?: number;
-  sort?: "newest" | "oldest" | "price_asc" | "price_desc";
+  sort?: "date_desc" | "date_asc" | "price_asc" | "price_desc" | "rate_asc" | "rate_desc" | "entry_asc" | "entry_desc" | "year_asc" | "year_desc";
 }
 
 // Filter facets derived from published deals: which states and deal types
@@ -122,14 +122,19 @@ export async function getFilteredDeals(filters: DealFilters): Promise<Deal[]> {
   if (filters.maxPrice != null) conds.push(lte(dealsTable.purchasePrice, filters.maxPrice));
   if (filters.minBeds != null) conds.push(gte(dealsTable.beds, filters.minBeds));
 
-  const orderBy =
-    filters.sort === "price_asc"
-      ? asc(dealsTable.purchasePrice)
-      : filters.sort === "price_desc"
-        ? desc(dealsTable.purchasePrice)
-        : filters.sort === "oldest"
-          ? asc(dealsTable.createdAt)
-          : desc(dealsTable.createdAt);
+  const orderByMap: Record<string, SQL> = {
+    date_desc:  desc(dealsTable.createdAt),
+    date_asc:   asc(dealsTable.createdAt),
+    price_asc:  asc(dealsTable.purchasePrice),
+    price_desc: desc(dealsTable.purchasePrice),
+    rate_asc:   asc(dealsTable.interestRate),
+    rate_desc:  desc(dealsTable.interestRate),
+    entry_asc:  asc(dealsTable.entryFee),
+    entry_desc: desc(dealsTable.entryFee),
+    year_asc:   asc(dealsTable.yearBuilt),
+    year_desc:  desc(dealsTable.yearBuilt),
+  };
+  const orderBy = filters.sort ? (orderByMap[filters.sort] ?? desc(dealsTable.createdAt)) : desc(dealsTable.createdAt);
 
   const rows = await getDb()
     .select()
@@ -158,17 +163,17 @@ function filterSeed(filters: DealFilters): Deal[] {
   if (filters.maxPrice != null) deals = deals.filter((d) => d.purchasePrice <= filters.maxPrice!);
   if (filters.minBeds != null) deals = deals.filter((d) => d.beds >= filters.minBeds!);
   switch (filters.sort) {
-    case "price_asc":
-      deals.sort((a, b) => a.purchasePrice - b.purchasePrice);
-      break;
-    case "price_desc":
-      deals.sort((a, b) => b.purchasePrice - a.purchasePrice);
-      break;
-    case "oldest":
-      deals.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
-      break;
-    default:
-      deals.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    case "date_desc":  deals.sort((a, b) => b.createdAt.localeCompare(a.createdAt)); break;
+    case "date_asc":   deals.sort((a, b) => a.createdAt.localeCompare(b.createdAt)); break;
+    case "price_asc":  deals.sort((a, b) => a.purchasePrice - b.purchasePrice); break;
+    case "price_desc": deals.sort((a, b) => b.purchasePrice - a.purchasePrice); break;
+    case "rate_asc":   deals.sort((a, b) => (a.interestRate ?? 0) - (b.interestRate ?? 0)); break;
+    case "rate_desc":  deals.sort((a, b) => (b.interestRate ?? 0) - (a.interestRate ?? 0)); break;
+    case "entry_asc":  deals.sort((a, b) => (a.entryFee ?? 0) - (b.entryFee ?? 0)); break;
+    case "entry_desc": deals.sort((a, b) => (b.entryFee ?? 0) - (a.entryFee ?? 0)); break;
+    case "year_asc":   deals.sort((a, b) => (a.yearBuilt ?? 0) - (b.yearBuilt ?? 0)); break;
+    case "year_desc":  deals.sort((a, b) => (b.yearBuilt ?? 0) - (a.yearBuilt ?? 0)); break;
+    default:           deals.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   }
   return deals;
 }

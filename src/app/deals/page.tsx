@@ -11,6 +11,11 @@ export const metadata = {
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
+const VALID_SORTS = new Set<string>([
+  "date_desc","date_asc","price_asc","price_desc",
+  "rate_asc","rate_desc","entry_asc","entry_desc","year_asc","year_desc",
+]);
+
 function parseFilters(sp: Record<string, string | string[] | undefined>): Filters {
   const get = (k: string) => (Array.isArray(sp[k]) ? sp[k]?.[0] : sp[k]) as string | undefined;
   const dealType = get("dealType");
@@ -19,8 +24,7 @@ function parseFilters(sp: Record<string, string | string[] | undefined>): Filter
     q: get("q") || undefined,
     state: get("state") || undefined,
     dealType: DEAL_TYPES.includes(dealType as DealType) ? (dealType as DealType) : undefined,
-    sort:
-      sort === "price_asc" || sort === "price_desc" || sort === "oldest" ? sort : "newest",
+    sort: (VALID_SORTS.has(sort ?? "") ? sort : "date_desc") as Filters["sort"],
   };
 }
 
