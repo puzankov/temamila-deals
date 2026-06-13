@@ -44,7 +44,7 @@ export function ContactForm() {
       <textarea name="message" rows={4} placeholder="Tell us your buy box — markets, budget, and strategy."
         className="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/30" />
       <button type="submit" disabled={status === "submitting"}
-        className="brand-gradient w-full rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 disabled:opacity-60">
+        className="brand-gradient w-full rounded-xl px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 disabled:opacity-60">
         {status === "submitting" ? "Sending…" : "Join the buyers list"}
       </button>
       {status === "error" && <p className="text-sm text-red-600">Something went wrong. Please try again.</p>}

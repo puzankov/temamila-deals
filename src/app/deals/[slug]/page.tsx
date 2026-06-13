@@ -176,7 +176,7 @@ export default async function DealDetailPage({ params }: { params: Params }) {
 
           <a
             href={`tel:${deal.directPhone ? deal.directPhone.replace(/\D/g, "").replace(/^/, "+1") : CONTACT_PHONE_TEL}`}
-            className="brand-gradient flex items-center gap-4 rounded-2xl px-6 py-5 text-white shadow-lg transition hover:opacity-90 active:scale-[0.98]"
+            className="brand-gradient flex items-center gap-4 rounded-xl px-6 py-5 text-white shadow-lg transition hover:opacity-90 active:scale-[0.98]"
           >
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/20">
               <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">

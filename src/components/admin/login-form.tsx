@@ -23,7 +23,7 @@ export function LoginForm({ from }: { from: string }) {
       <button
         type="submit"
         disabled={pending}
-        className="brand-gradient w-full rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 disabled:opacity-60"
+        className="brand-gradient w-full rounded-xl px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 disabled:opacity-60"
       >
         {pending ? "Signing in…" : "Sign in"}
       </button>

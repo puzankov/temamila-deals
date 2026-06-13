@@ -21,7 +21,7 @@ export default async function AdminDashboard() {
         </div>
         <Link
           href="/admin/deals/new"
-          className="brand-gradient rounded-full px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90"
+          className="brand-gradient rounded-xl px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90"
         >
           + New deal
         </Link>

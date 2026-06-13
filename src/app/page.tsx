@@ -35,46 +35,25 @@ function Hero() {
 
       <div className="mx-auto max-w-6xl px-4 py-28 sm:py-36">
         <div className="max-w-3xl">
-          <span className="inline-flex items-center gap-2 rounded-full bg-brand/20 px-4 py-1.5 text-sm font-semibold text-brand ring-1 ring-brand/30">
-            <span className="h-1.5 w-1.5 rounded-full bg-brand" />
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-sm font-semibold text-white backdrop-blur-sm">
+            <span className="h-1.5 w-1.5 rounded-full bg-white/70" />
             Premier Creative Real Estate Community
           </span>
 
           <h1 className="mt-6 text-5xl font-extrabold leading-tight tracking-tight text-white sm:text-6xl">
             Unlock Your Next{" "}
-            <span className="text-gradient">Creative Real Estate</span>{" "}
+            <span className="text-gradient whitespace-nowrap">Creative Real Estate</span>{" "}
             Investment
           </h1>
           <p className="mt-4 text-xl font-medium text-slate-300">
             Personalized to your buying criteria.
           </p>
 
-          {/* Search bar */}
-          <form action="/deals" method="get" className="mt-8">
-            <div className="flex items-center overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-white/10">
-              <svg className="ml-4 h-5 w-5 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <circle cx="11" cy="11" r="8" /><path strokeLinecap="round" d="m21 21-4.35-4.35" />
-              </svg>
-              <input
-                name="q"
-                type="text"
-                placeholder="Enter an address, state, city, area or zip code"
-                className="flex-1 bg-transparent px-4 py-4 text-slate-900 placeholder-slate-400 outline-none text-sm sm:text-base"
-              />
-              <button
-                type="submit"
-                className="brand-gradient m-1.5 rounded-xl px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:opacity-90 shrink-0"
-              >
-                Search Deals
-              </button>
-            </div>
-          </form>
-
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Link href="/deals" className="brand-gradient rounded-full px-6 py-3 font-semibold text-white shadow-lg transition hover:opacity-90">
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/deals" className="brand-gradient rounded-xl px-6 py-3 font-semibold text-white shadow-lg transition hover:opacity-90">
               Browse All Deals
             </Link>
-            <Link href="/buyers-list" className="rounded-full border border-white/30 px-6 py-3 font-semibold text-white transition hover:bg-white/10">
+            <Link href="/buyers-list" className="rounded-xl border border-white/30 px-6 py-3 font-semibold text-white transition hover:bg-white/10">
               Get on the Buyers List
             </Link>
           </div>
@@ -418,7 +397,7 @@ function JVBanner() {
         <div className="mt-10">
           <a
             href={`tel:${CONTACT_PHONE_TEL}`}
-            className="inline-flex items-center gap-3 rounded-2xl bg-white px-8 py-4 text-base font-bold text-brand shadow-lg transition hover:shadow-xl hover:-translate-y-0.5"
+            className="inline-flex items-center gap-3 rounded-xl bg-white px-8 py-4 text-base font-bold text-brand shadow-lg transition hover:shadow-xl hover:-translate-y-0.5"
           >
             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.47 11.47 0 003.58.57 1 1 0 011 1V21a1 1 0 01-1 1A17 17 0 013 5a1 1 0 011-1h3.5a1 1 0 011 1 11.47 11.47 0 00.57 3.58 1 1 0 01-.25 1.01l-2.2 2.2z" />
@@ -601,7 +580,7 @@ function FinalCTA() {
             </div>
             <a
               href={`tel:${CONTACT_PHONE_TEL}`}
-              className="brand-gradient flex shrink-0 items-center gap-3 rounded-2xl px-8 py-4 text-base font-bold text-white shadow-lg transition hover:opacity-90 hover:-translate-y-0.5"
+              className="brand-gradient flex shrink-0 items-center gap-3 rounded-xl px-8 py-4 text-base font-bold text-white shadow-lg transition hover:opacity-90 hover:-translate-y-0.5"
             >
               <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.47 11.47 0 003.58.57 1 1 0 011 1V21a1 1 0 01-1 1A17 17 0 013 5a1 1 0 011-1h3.5a1 1 0 011 1 11.47 11.47 0 00.57 3.58 1 1 0 01-.25 1.01l-2.2 2.2z" />

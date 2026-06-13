@@ -214,7 +214,7 @@ export function DealForm({ deal }: { deal?: Deal }) {
               <button
                 type="button"
                 onClick={finishEditing}
-                className="brand-gradient rounded-lg px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:opacity-90"
+                className="brand-gradient rounded-xl px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:opacity-90"
               >
                 Done
               </button>

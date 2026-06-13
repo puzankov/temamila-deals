@@ -70,7 +70,7 @@ export function LeadForm({ dealSlug, dealAddress }: { dealSlug: string; dealAddr
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="brand-gradient w-full rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 disabled:opacity-60"
+        className="brand-gradient w-full rounded-xl px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 disabled:opacity-60"
       >
         {status === "submitting" ? "Sending…" : "Request Deal Info"}
       </button>
