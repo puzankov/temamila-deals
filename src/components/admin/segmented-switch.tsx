@@ -10,7 +10,7 @@ export function SegmentedSwitch({
   defaultValue,
 }: {
   name: string;
-  options: { value: string; label: string }[];
+  options: { value: string; label: string; activeClass?: string }[];
   defaultValue?: string;
 }) {
   const save = useAutosave();
@@ -27,7 +27,9 @@ export function SegmentedSwitch({
             save();
           }}
           className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${
-            val === o.value ? "bg-brand text-white shadow-sm" : "text-slate-600 hover:text-slate-900"
+            val === o.value
+              ? (o.activeClass ?? "bg-brand text-white") + " shadow-sm"
+              : "text-slate-600 hover:text-slate-900"
           }`}
         >
           {o.label}

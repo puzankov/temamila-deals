@@ -143,7 +143,11 @@ export function DealForm({ deal }: { deal?: Deal }) {
                 <SegmentedSwitch
                   name="status"
                   defaultValue={deal?.status ?? "available"}
-                  options={DEAL_STATUSES.map((s) => ({ value: s, label: STATUS_LABELS[s] }))}
+                  options={[
+                    { value: "available",      label: STATUS_LABELS.available,      activeClass: "bg-emerald-500 text-white" },
+                    { value: "under_contract", label: STATUS_LABELS.under_contract, activeClass: "bg-amber-400 text-white" },
+                    { value: "closed",         label: STATUS_LABELS.closed,         activeClass: "bg-slate-500 text-white" },
+                  ]}
                 />
               </div>
             </div>

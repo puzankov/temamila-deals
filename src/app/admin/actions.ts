@@ -51,6 +51,17 @@ export async function setPublishedAction(id: string, published: boolean) {
   revalidatePath("/admin");
 }
 
+// ---------- Status ----------
+
+export async function setStatusAction(id: string, status: string) {
+  if (!id) return;
+  const updated = await updateDeal(id, { status: status as "available" | "under_contract" | "closed" });
+  revalidatePath("/");
+  revalidatePath("/deals");
+  if (updated) revalidatePath(`/deals/${updated.slug}`);
+  revalidatePath("/admin");
+}
+
 // ---------- Delete ----------
 
 export async function deleteDealAction(formData: FormData) {
