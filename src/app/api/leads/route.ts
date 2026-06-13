@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { sendEmail, buildDealRequestEmail, buildBuyBoxEmail } from "@/lib/mailer";
-import { logDealRequest } from "@/lib/sheets";
+import { logDealRequest, logBuyBoxSubmission } from "@/lib/sheets";
 import { COMPANY_URL } from "@/lib/config";
 
 export async function POST(request: Request) {
@@ -38,7 +38,10 @@ export async function POST(request: Request) {
         buyBox = { raw: message };
       }
       const mail = buildBuyBoxEmail({ name, email, phone, buyBox });
-      await sendEmail(mail);
+      await Promise.all([
+        sendEmail(mail),
+        logBuyBoxSubmission({ name, email, phone, buyBox }),
+      ]);
     } else {
       const dealUrl = `${COMPANY_URL}/deals/${dealSlug}`;
       const [mail] = await Promise.all([
